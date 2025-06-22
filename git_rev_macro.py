@@ -6,20 +6,26 @@
 import subprocess
 import re
 
-revision = (
-    subprocess.check_output(
-        ["git", "describe", "--tags", "--always", "--dirty"])
-    .strip()
-    .decode("utf-8")
-)
+try:
+    revision = (
+        subprocess.check_output(
+            ["git", "describe", "--tags", "--always", "--dirty"])
+        .strip()
+        .decode("utf-8")
+    )
+except Exception:
+    revision = "unknown"
 
-repo = (
-    subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
-    .strip()
-    .decode("utf-8")
-    .replace('.git', '')
-    .replace('https://github.com/','')
-)
+try:
+    repo = (
+        subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
+        .strip()
+        .decode("utf-8")
+        .replace('.git', '')
+        .replace('https://github.com/','')
+    )
+except Exception:
+    repo = ""
 
 repolink = re.sub(r'(v[\d+\.a-zA-Z]+)-.*', r"\1", revision)
 
